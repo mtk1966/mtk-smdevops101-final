@@ -42,7 +42,7 @@ namespace SimpleMvc.Controllers
                 machine_Name = Environment.MachineName,
                 machine_Os = Environment.OSVersion,
                 student = studentName ?? "Isim Bulunamadi",
-                notum_lutfen_okuyun = "Merhaba hocam sizinle son kez burda konuşmak beni mutlu ediyor.Kesinlik 6 hafta boyunca çok iyi bir zaman geçirdik bunun için teşekkür ederim ayrıca vir sonraki oyun gününü en yakın zamanda yapalım;) görüşmek üzere.",
+                notum_lutfen_okuyun = "Merhaba hocam sizinle son kez burda konuşmak beni mutlu ediyor.Kesinlik 6 hafta boyunca çok iyi bir zaman geçirdik bunun için teşekkür ederim ayrıca bir sonraki oyun gününü en yakın zamanda yapalım;) görüşmek üzere.",
                 environment = environment,
                 serverTimeUtc = DateTime.UtcNow
             });
