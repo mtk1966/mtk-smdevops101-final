@@ -1,21 +1,21 @@
-# 1. Aşama: Çalışma Ortamı
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
+# 1. Aşama: Çalışma Ortamı (Runtime)
+FROM mcr.microsoft.com/dotnet/aspnet:10.0-preview AS base
 WORKDIR /app
 EXPOSE 8080
 EXPOSE 8081
 
 # 2. Aşama: Derleme (SDK)
-FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:10.0-preview AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
 # Dosyaları kopyalıyoruz
 COPY . .
 
-# SENİN BELİRTTİĞİN KONUMA GİDİYORUZ
+# Dosyanın olduğu klasöre git
 WORKDIR "/src/src/SimpleMvc/SimpleMvc"
 
-# Projeyi restore et ve derle
+# Restore ve Build
 RUN dotnet restore "SimpleMvc.csproj"
 RUN dotnet build "SimpleMvc.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
@@ -28,5 +28,4 @@ RUN dotnet publish "SimpleMvc.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-# Not: Eğer uygulama ismi farklıysa SimpleMvc.dll kısmını ona göre güncelle
 ENTRYPOINT ["dotnet", "SimpleMvc.dll"]
