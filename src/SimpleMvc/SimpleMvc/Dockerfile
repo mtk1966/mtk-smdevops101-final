@@ -1,26 +1,22 @@
-FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS base
-WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
-
 FROM mcr.microsoft.com/dotnet/sdk:9.0 AS build
-ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 
-# Önce her şeyi kopyalıyoruz (Hata payını sıfırlamak için)
+# Her şeyi kopyala
 COPY . .
 
-# Proje dosyasını bul ve restore et
-RUN dotnet restore "SimpleMvc.csproj"
+# İçeride ne var ne yok terminale yazdır (Hata burada kopacak)
+RUN ls -R
 
-# Derle
-RUN dotnet build "SimpleMvc.csproj" -c $BUILD_CONFIGURATION -o /app/build
+# Eğer dosya ismi farklıysa (küçük harf vb.) hata vermemesi için wildcard kullanalım
+RUN dotnet restore *.csproj
+
+RUN dotnet build *.csproj -c Release -o /app/build
 
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "SimpleMvc.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p:UseAppHost=false
+RUN dotnet publish *.csproj -c Release -o /app/publish /p:UseAppHost=false
 
-FROM base AS final
+FROM mcr.microsoft.com/dotnet/aspnet:9.0 AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+# Buraya dikkat: DLL ismini projene göre güncellemen gerekebilir!
 ENTRYPOINT ["dotnet", "SimpleMvc.dll"]
