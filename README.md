@@ -11,11 +11,10 @@ Bu proje, modern bir **ASP.NET Core MVC** uygulamasının Dockerize edilmesi ve 
 ---
 
 ## 🛠 Kullanılan Teknolojiler
-* **Framework:** ASP.NET Core MVC (.NET 8.0)
+* **Framework:** ASP.NET Core MVC (.NET 10.0)
 * **Containerization:** Docker & Docker Compose
 * **Web Server:** Nginx (Reverse Proxy)
 * **CI/CD:** GitHub Actions
-* **Database (Opsiyonel):** PostgreSQL (Yapılandırmaya bağlı)
 
 ---
 
