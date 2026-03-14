@@ -1,0 +1,43 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          password: ${{ secrets.VPS_PASS }}
+          script: |
+            # 1. Ana dizine git ve guncelle
+            cd ${{ secrets.DEPLOY_PATH }}
+            git fetch --all
+            git reset --hard origin/main
+
+            # 2. .env içeriğini hazırla
+            # (Tırnak hatası olmaması için printf en güvenlisidir)
+            CONTENT="APP_PORT=${{ secrets.APP_PORT }}\nSTUDENT_NAME=${{ secrets.STUDENT_NAME }}\nASPNETCORE_ENVIRONMENT=${{ secrets.ASPNETCORE_ENVIRONMENT }}"
+
+            # 3. .env dosyasını her ihtimale karşı her yere kopyala
+            printf "$CONTENT" > .env
+            printf "$CONTENT" > docker/.env 2>/dev/null || true
+
+            # 4. Docker dizinine gir (Eğer varsa)
+            [ -d "docker" ] && cd docker
+
+            # 5. Docker Compose komutunu dosya yolunu ZORLAYARAK çalıştır
+            # --env-file parametresi, .yml içindeki hatalı yolları ezer.
+            echo "${{ secrets.VPS_PASS }}" | sudo -S docker-compose --env-file .env down || true
+            echo "${{ secrets.VPS_PASS }}" | sudo -S docker-compose --env-file .env up -d --build
+
+            echo "--- DOCKER DURUMU ---"
+            sudo docker ps | grep -E "api|nginx"

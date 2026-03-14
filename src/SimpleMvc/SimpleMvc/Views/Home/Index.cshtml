@@ -1,0 +1,98 @@
+﻿@{
+    Layout = null; // Eğer layout kullanmıyorsan kalsın, kullanıyorsan silebilirsin.
+}
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MTK Dashboard</title>
+    <style>
+            /* Arka plan: Koyu Mor ve Siyah geçişi */
+            body {
+                margin: 0;
+                padding: 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+                background: radial-gradient(circle at center, #1a0b2e 0%, #05010a 100%);
+                font-family: 'Poppins', 'Segoe UI', sans-serif;
+                color: white;
+                overflow: hidden;
+            }
+
+            /* Ana Kare: Hafif opak, yumuşak kenarlı ve cam efektli */
+            .glass-card {
+                background: rgba(255, 255, 255, 0.03);
+                backdrop-filter: blur(15px);
+                -webkit-backdrop-filter: blur(15px);
+                border: 1px solid rgba(255, 255, 255, 0.1);
+                border-radius: 30px;
+                padding: 50px;
+                box-shadow: 0 25px 50px rgba(0, 0, 0, 0.6);
+                /* Sağa yatık duruş (Perspective + Skew) */
+                transform: perspective(1000px) rotateY(-8deg) skewX(-2deg);
+                transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                width: 300px;
+            }
+
+                /* Kart hover olunca düzelme efekti */
+                .glass-card:hover {
+                    transform: perspective(1000px) rotateY(0deg) skewX(0deg) scale(1.02);
+                    background: rgba(255, 255, 255, 0.06);
+                    border-color: rgba(255, 255, 255, 0.2);
+                }
+
+            /* Modern Butonlar */
+            .btn-mtk {
+                display: block;
+                padding: 16px 20px;
+                text-align: center;
+                text-decoration: none;
+                color: #e0e0e0;
+                font-size: 16px;
+                font-weight: 500;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                border-radius: 15px;
+                background: rgba(110, 44, 242, 0.15);
+                border: 1px solid rgba(110, 44, 242, 0.3);
+                transition: all 0.3s ease;
+                position: relative;
+                overflow: hidden;
+            }
+
+                .btn-mtk:hover {
+                    background: #6e2cf2;
+                    color: white;
+                    box-shadow: 0 0 20px rgba(110, 44, 242, 0.6);
+                    transform: translateY(-2px);
+                }
+
+            /* "Hakkımda" butonu için biraz daha parlak bir ton */
+            .btn-about {
+                border-color: rgba(163, 44, 242, 0.5);
+                background: rgba(163, 44, 242, 0.2);
+            }
+
+                .btn-about:hover {
+                    background: #a32cf2;
+                    box-shadow: 0 0 25px rgba(163, 44, 242, 0.7);
+                }
+    </style>
+</head>
+<body>
+
+    <div class="glass-card">
+        <a href="/Health" class="btn-mtk">Health</a>
+        <a href="/Info" class="btn-mtk">Info</a>
+        <a href="https://mtk.org.tr/Home/AboutMe" class="btn-mtk btn-about">Hakkımda</a>
+    </div>
+
+</body>
+</html>
