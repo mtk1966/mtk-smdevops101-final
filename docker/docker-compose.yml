@@ -1,8 +1,8 @@
 services:
   simplemvc:
     build:
-      context: ..
-      dockerfile: src/SimpleMvc/SimpleMvc/Dockerfile
+      context: ../src/SimpleMvc          # <-- 1. DEĞİŞİKLİK: Context'i src içindeki ana klasöre çektik
+      dockerfile: SimpleMvc/Dockerfile   # <-- 2. DEĞİŞİKLİK: Context'e göre Dockerfile yolunu güncelledik
     env_file:
       - ../.env
     environment:

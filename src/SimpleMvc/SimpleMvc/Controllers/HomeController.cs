@@ -8,6 +8,41 @@ namespace SimpleMvc.Controllers
     {
         public IActionResult Index()
         {
+            string clientIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "Bilinmiyor";
+            string userAgent = Request.Headers["User-Agent"].ToString();
+
+            // 1. DEĞİŞİKLİK: Her zaman aynı dosyaya yazması için sabit bir ad veriyoruz
+            string fileName = "logs.txt";
+
+            // wwwroot içindeki ClientLogs klasörü
+            string folderPath = Path.Combine(_env.WebRootPath, "ClientLogs");
+
+            if (!Directory.Exists(folderPath))
+            {
+                Directory.CreateDirectory(folderPath);
+            }
+
+            string fullFilePath = Path.Combine(folderPath, fileName);
+
+            // Log formatını oluştur (Kayıtlar arasına karışmaması için çizgi ekledik)
+            string logEntry = $"[{DateTime.Now:yyyy-MM-dd HH:mm:ss}]\n" +
+                              $"Client IP: {clientIp}\n" +
+                              $"Tarayıcı: {userAgent}\n" +
+                              "--------------------------------------------------\n";
+
+            try
+            {
+                // 2. DEĞİŞİKLİK: WriteAllText yerine AppendAllText kullanıyoruz.
+                // AppendAllText, dosya yoksa oluşturur; varsa içindekileri silmeden en alta yeni kaydı ekler.
+                System.IO.File.AppendAllText(fullFilePath, logEntry);
+
+                ViewBag.Message = $"Log başarıyla eklendi. Dosyayı tarayıcıdan okumak için: /ClientLogs/{fileName}";
+            }
+            catch (Exception ex)
+            {
+                ViewBag.Message = $"Dosyaya ekleme yapılırken hata oluştu: {ex.Message}";
+            }
+
             return View();
         }
         private readonly IWebHostEnvironment _env;
