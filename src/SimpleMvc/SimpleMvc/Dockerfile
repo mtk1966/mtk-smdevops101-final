@@ -28,4 +28,13 @@ RUN dotnet publish "SimpleMvc.csproj" -c $BUILD_CONFIGURATION -o /app/publish /p
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
+
+USER root
+
+# 2. Klasörü zorla oluştur ve sahipliğini kısıtlı 'app' kullanıcısına ver ($APP_UID)
+RUN mkdir -p /app/wwwroot/ClientLogs && chown -R $APP_UID /app/wwwroot/ClientLogs
+
+# 3. Güvenlik için tekrar kısıtlı 'app' kullanıcısına dön
+USER $APP_UID
+
 ENTRYPOINT ["dotnet", "SimpleMvc.dll"]
